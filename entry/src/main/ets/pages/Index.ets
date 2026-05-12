@@ -99,9 +99,6 @@ struct WeatherApp {
   @State weatherDesc: string = '加载中...';
   @State humidity: string = '';
   @State wind: string = '';
-  @State aqi: string = '';
-  @State aqiQuality: string = '';
-  @State pm25: string = '';
   @State hourForecast: HourForecastItem[] = [];
   @State showSearchDialog: boolean = false;
   @State searchKeyword: string = '';
@@ -340,7 +337,6 @@ struct WeatherApp {
         .margin({ top: 20, bottom: 16 });
 
         // 天气卡片（科幻深海渐变）
-        // 天气卡片（缩小版）
         Column() {
           Row() {
             Text(this.getCityEmoji(this.city))
@@ -431,7 +427,7 @@ struct WeatherApp {
                 .backgroundColor('#1E243080')
                 .borderRadius(16)
                 .backdropBlur(8)
-                .margin({ right: 6 })
+                .margin({ right: 6 });
               });
             }
             .width('100%')
@@ -447,6 +443,7 @@ struct WeatherApp {
         })
         .shadow({ radius: 20, color: '#1e3c7250', offsetY: 10 })
         .margin({ left: 16, right: 16, bottom: 12 });
+
         // ========== 可滚动内容 ==========
         Scroll() {
           Column() {
@@ -596,14 +593,102 @@ struct WeatherApp {
         }
         .scrollable(ScrollDirection.Vertical)
         .scrollBar(BarState.Auto)
-        .layoutWeight(1) // 占据剩余高度，实现滚动
+        .layoutWeight(1)
       }
       .width('100%')
       .height('100%');
 
-      // 城市搜索弹窗（保持不变）
+      // 城市搜索弹窗
       if (this.showSearchDialog) {
-        // ... 弹窗代码保持原样 ...
+        Column() {
+          Column() {
+            // 弹窗头部
+            Row() {
+              Text('选择城市')
+                .fontSize(18)
+                .fontWeight(FontWeight.Bold)
+                .fontColor('#FFFFFF');
+              Blank();
+              Button('✕')
+                .backgroundColor(Color.Transparent)
+                .fontColor('#FFFFFF')
+                .fontSize(18)
+                .padding(0)
+                .onClick(() => {
+                  this.showSearchDialog = false;
+                  this.searchKeyword = '';
+                  this.searchResults = [];
+                });
+            }
+            .width('100%')
+            .margin({ bottom: 16 });
+
+            // 搜索输入框
+            TextInput({ placeholder: '输入城市名搜索', text: this.searchKeyword })
+              .width('100%')
+              .height(44)
+              .backgroundColor('#1E2430')
+              .borderRadius(22)
+              .padding({ left: 16, right: 16 })
+              .fontColor('#FFFFFF')
+              .placeholderColor('#8899AA')
+              .onChange((value: string) => {
+                this.searchKeyword = value;
+                this.searchCity(value);
+              });
+
+            // 搜索结果
+            if (this.isSearching) {
+              Row() {
+                Text('加载中...').fontSize(14).fontColor('#8899AA');
+              }
+              .width('100%')
+              .height(100)
+              .justifyContent(FlexAlign.Center);
+            } else if (this.searchResults.length > 0) {
+              Column() {
+                ForEach(this.searchResults, (item: CityPoiItem) => {
+                  Button(item.name)
+                    .width('100%')
+                    .height(36)
+                    .fontSize(14)
+                    .backgroundColor('#1E2430')
+                    .fontColor('#FFFFFF')
+                    .borderRadius(18)
+                    .margin({ bottom: 8 })
+                    .onClick(() => {
+                      this.selectCity(item.name);
+                    });
+                });
+              }
+              .width('100%')
+              .margin({ top: 16 });
+            } else if (this.searchKeyword.length > 0 && !this.isSearching) {
+              Text('未找到相关城市')
+                .fontSize(14)
+                .fontColor('#8899AA')
+                .width('100%')
+                .textAlign(TextAlign.Center)
+                .margin({ top: 32, bottom: 32 });
+            }
+          }
+          .padding(20)
+          .width('90%')
+          .backgroundColor('#0D1117')
+          .borderRadius(28)
+          .border({ width: 1, color: '#6C5CE750' })
+          .shadow({ radius: 20, color: '#00000080', offsetY: 10 });
+        }
+        .width('100%')
+        .height('100%')
+        .backgroundColor('#00000080')
+        .justifyContent(FlexAlign.Center)
+        .alignItems(HorizontalAlign.Center)
+        .onClick(() => {
+          this.showSearchDialog = false;
+          this.searchKeyword = '';
+          this.searchResults = [];
+        });
       }
     }
     .width('100%')
