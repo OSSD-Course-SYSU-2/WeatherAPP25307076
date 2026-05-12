@@ -122,6 +122,50 @@ HEAD
 ## 技术栈
 
 ## 📁 项目目录结构
+WeatherAPP/
+│
+├── AppScope/ # 应用全局配置
+│ ├── resources/ # 应用级资源
+│ │ └── base/
+│ │ ├── element/ # 字符串、颜色常量
+│ │ └── media/ # 应用图标
+│ └── app.json5 # 应用唯一标识、版本号
+│
+├── entry/ # 主模块
+│ └── src/
+│ ├── main/
+│ │ ├── ets/
+│ │ │ ├── entryability/
+│ │ │ │ └── EntryAbility.ets # 应用启动入口
+│ │ │ └── pages/
+│ │ │ ├── Index.ets # 🌤️ 核心页面（所有功能）
+│ │ │ └── WebViewPage.ets # 内嵌浏览器页面
+│ │ ├── resources/
+│ │ │ ├── base/
+│ │ │ │ ├── element/ # 字符串常量(string.json)
+│ │ │ │ ├── media/ # 天气图标（sunny.png等）
+│ │ │ │ └── profile/ # 路由表配置
+│ │ │ └── rawfile/ # 原始文件（预留）
+│ │ └── module.json5 # ⚙️ 权限声明、Ability注册
+│ └── ohosTest/ # 单元测试目录
+│
+├── hvigor/ # 构建脚本目录
+│ └── hvigor-config.json5 # 构建优先级配置
+│
+├── oh_modules/ # 第三方依赖包（自动生成）
+│
+├── screenshots/ # 📸 应用截图文件夹
+│ ├── 广州.jpg # 实时天气截图
+│ ├── 上海.jpg # 未来预报截图
+│ ├── 成都.jpg # 城市快捷入口截图
+│ └── 搜索功能.jpg # 城市搜索截图
+│
+├── .gitignore # 🚫 Git忽略配置
+├── build-profile.json5 # 🔧 签名配置、产品类型
+├── hvigorfile.ts # 项目级构建脚本
+├── oh-package.json5 # 📦 项目依赖管理
+├── oh-package-lock.json5 # 依赖锁定文件
+└── README.md # 📖 项目说明文档
 
 ### 重点文件说明
 
